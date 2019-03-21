@@ -2,7 +2,7 @@
 define('JWT_DURATION',1 * 25 * 60 * 60); // 1 hour
 
 abstract class JSAPI {
-  protected $noAuth = ['selectCounty', 'logout', 'getCounties', 'getAll', 'getString', 'getStrings', 'methods'];
+  protected $noAuth = ['methods'];
 
   function __construct($method,$params){
     $this->token = new stdClass();
@@ -18,7 +18,7 @@ abstract class JSAPI {
     if(isset($_COOKIE['token']) && !$jwt)
       $this->checkToken($_COOKIE['token']);
     
-    if(!in_array($method, $this->noAuth)){
+    if(!isset($this->token->id) && !in_array($method, $this->noAuth)){
       return $this->unauthorized();
     }
   }
