@@ -17,6 +17,19 @@ class Data {
     return $return;
   }
 
+  function getConditions () {
+    $sql = "SELECT * FROM `condition` ORDER BY condText";
+    $result = $db->query($sql);
+    $return = [];
+    foreach($result as $row){
+      $return[] = [
+        'id'  => floatval($row['condID']),
+        'text'  => $row['condText']
+      ];
+    }
+    return $return;
+  }
+
   function getConsoles () {
     $sql = "SELECT `console`.*,COUNT(`itemID`) AS `conCount` FROM `console` LEFT JOIN `item` ON (`conText` = `itemConsole`) WHERE `item`.`itemDeleted` = 0 GROUP BY `item`.`itemConsole` ORDER BY `console`.`conOrderBy`";
     $result = $db->query($sql);
@@ -28,19 +41,6 @@ class Data {
         'link'  => $row['conLink'],
         'count' => $row['conCount'],
         'order' => floatval($row['conOrderBy'])
-      ];
-    }
-    return $return;
-  }
-
-  function getConditions () {
-    $sql = "SELECT * FROM `condition` ORDER BY condText";
-    $result = $db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'  => floatval($row['condID']),
-        'text'  => $row['condText']
       ];
     }
     return $return;
@@ -109,12 +109,50 @@ class Data {
     return $return;
   }
 
+  function editCategory ($id, $text) {
+    $sql = "INSERT INTO `category` (`catID`, `catText`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `catText` = ?";
+  }
+
+  function editCondition ($id, $text) {
+    $sql = "INSERT INTO `condition` (`condID`, `condText`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `condText` = ?";
+  }
+
+  function editConsole ($id, $text, $line, $orderBy) {
+    $sql = "INSERT INTO `console` (`catID`, `catText`, `conLink`, `conOrderBy`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `conText` = ?, `conLink` = ?, `conOrderBy` = ?";
+  }
+
+  function editExtras ($id, $itemId, $text) {
+    $sql = "INSERT INTO `extra` (`extraID`, `itemID`, `extraText`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `itemID` = ?, `extraText` = ?";
+  }
+
+  function editItem ($id, $name, $link, $console, $category, $condition, $box, $manual, $style) {
+    $sql = "INSERT INTO `item` (`itemID`, `itemName`, `itemLink`, `itemConsole`, `itemCat`, `itemCond`, `itemBox`, `itemManual`, `itemStyle`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `itemName` = ?, `itemLink` = ?, `itemConsole` = ?, `itemCat` = ?, `itemCond` = ?, `itemBox` = ?, `itemManual` = ?, `itemStyle` = ?";
+  }
+
+  function editStyle ($id, $name, $text) {
+    $sql = "INSERT INTO `style` (`styleID`, `styleName`, `styleText`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `styleName` = ?, `styleText` = ?";
+  }
+
+  function prepEdit ($q) {
+    // return _DB_->prepare($q);
+  }
+
+/****************************************************************************************************/
   function _getCategories () {
     return [
         ["id" => 4, "text" => "Accessory"],
         ["id" => 2, "text" => "Console"],
         ["id" => 1, "text" => "Game"],
         ["id" => 3, "text" => "Guide"]
+    ];
+  }
+
+  function _getConditions () {
+    return [
+      ["id" => 3, "text" => "complete"],
+      ["id" => 1, "text" => "digital"],
+      ["id" => 4, "text" => "new"],
+      ["id" => 2, "text" => "used"]
     ];
   }
 
@@ -145,15 +183,6 @@ class Data {
       ["id" => 25, "text" => "Console", "link" => "", "count" => "30", "order" => 25],
       ["id" => 26, "text" => "Accessory", "link" => "", "count" => "99", "order" => 26],
       ["id" => 27, "text" => "Guide", "link" => "", "count" => "81", "order" => 27]
-    ];
-  }
-
-  function _getConditions () {
-    return [
-      ["id" => 3, "text" => "complete"],
-      ["id" => 1, "text" => "digital"],
-      ["id" => 4, "text" => "new"],
-      ["id" => 2, "text" => "used"]
     ];
   }
 
