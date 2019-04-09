@@ -2,11 +2,13 @@
 
 class Data {
   
-  function __construct() {}
+  function __construct() {
+    $this->db = $GLOBALS['db'];
+  }
 
   function getCategories () {
     $sql = "SELECT * FROM `category` ORDER BY catText";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [
@@ -19,7 +21,7 @@ class Data {
 
   function getConditions () {
     $sql = "SELECT * FROM `condition` ORDER BY condText";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [
@@ -32,7 +34,7 @@ class Data {
 
   function getConsoles () {
     $sql = "SELECT `console`.*,COUNT(`itemID`) AS `conCount` FROM `console` LEFT JOIN `item` ON (`conText` = `itemConsole`) WHERE `item`.`itemDeleted` = 0 GROUP BY `item`.`itemConsole` ORDER BY `console`.`conOrderBy`";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [
@@ -48,7 +50,7 @@ class Data {
 
   function getStyles () {
     $sql = "SELECT * FROM `style` ORDER BY styleName";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [
@@ -62,7 +64,7 @@ class Data {
 
   function getItems () {
     $sql = "SELECT * FROM item WHERE itemDeleted = 0 ORDER BY itemName";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [
@@ -82,7 +84,7 @@ class Data {
 
   function getValues () {
     $sql = "SELECT valID,itemID,valAmount,MAX(valLastCheck) as valLastCheck FROM value LEFT JOIN item USING(itemID) WHERE item.itemDeleted = 0 GROUP BY itemID";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [
@@ -97,7 +99,7 @@ class Data {
 
   function getExtras () {
     $sql = "SELECT * FROM extra";
-    $result = $db->query($sql);
+    $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
       $return[] = [

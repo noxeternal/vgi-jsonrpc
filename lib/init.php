@@ -1,13 +1,13 @@
 <?php
 
-// $db = getenv('DBINFO');
-// $db = json_decode($db);
+$db = getenv('DBINFO');
+$db = json_decode($db);
 
-// define('_DB_', new mysqli($db->host, $db->user, $db->pass, $db->name));
-// if($db->connect_error)
-//   die($db->connect_error);
-// if($db->error)
-//   die($db->error);
+$GLOBALS['db'] = new mysqli($db->host, $db->user, $db->pass, $db->name);
+if($db->connect_error)
+  die($db->connect_error);
+if($db->error)
+  die($db->error);
 
 
 if (!defined('JWT_SECRET')) {
