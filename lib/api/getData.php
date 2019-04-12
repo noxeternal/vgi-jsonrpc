@@ -1,6 +1,6 @@
 <?php
 
-class GetData extends JSAPI {
+class getData extends JSAPI {
   function __construct ($method, $params) {
     $this->noAuth = ['getAll'];
     parent::__construct($method, $params);
