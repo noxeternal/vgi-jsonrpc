@@ -6,8 +6,18 @@ abstract class JSAPI {
 
   function __construct($method,$params){
     $this->token = new stdClass();
+
     if(isset($_ENV['HTTP_AUTHORIZATION'])){
       preg_match('#^Bearer (.+?)$#',$_ENV['HTTP_AUTHORIZATION'],$m);
+
+      if($m){
+        $jwt = $m[1];
+        $this->checkToken($jwt);
+      }
+    }
+    
+    if(isset($_SERVER['HTTP_AUTHORIZATION'])){
+      preg_match('#^Bearer (.+?)$#',$_SERVER['HTTP_AUTHORIZATION'],$m);
 
       if($m){
         $jwt = $m[1];

@@ -7,16 +7,21 @@ class getData extends JSAPI {
   }
 
   function getAll () {
-    $Data = new Data();
+    $data = new Data();
     return [
-      'categories'  => $Data->getCategories(),
-      'consoles'    => $Data->getConsoles(),
-      'conditions'  => $Data->getConditions(),
-      'styles'      => $Data->getStyles(),
-      'games'       => $Data->getItems(),
-      'values'      => $Data->getValues(),
-      'extras'      => $Data->getExtras()
+      'categories'  => $data->getCategories(),
+      'consoles'    => $data->getConsoles(),
+      'conditions'  => $data->getConditions(),
+      'styles'      => $data->getStyles(),
+      'games'       => $data->getItems(),
+      'values'      => $data->getValues(),
+      'extras'      => $data->getExtras()
     ];
+  }
+
+  function getDeleted () {
+    $data = new Data();
+    return $data->getDeleted();
   }
 
 }
