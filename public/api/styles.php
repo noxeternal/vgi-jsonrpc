@@ -22,5 +22,4 @@ function formatStyle ($s) {
 foreach($result as $row) {
   echo '.',formatClassName($row['styleName'])," {\n",formatStyle($row['styleText']),";\n}\n";
 }
-
 ?>
