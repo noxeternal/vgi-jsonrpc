@@ -164,10 +164,10 @@ class Data {
     return $result;
   }
 
-  function editItem ($id, $name, $link, $console, $category, $condition, $box, $manual, $style, $deleted) {
-    $sql = "INSERT INTO `item` (`itemID`, `itemName`, `itemLink`, `itemConsole`, `itemCat`, `itemCond`, `itemBox`, `itemManual`, `itemStyle`, `_DELETED`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `itemName` = ?, `itemLink` = ?, `itemConsole` = ?, `itemCat` = ?, `itemCond` = ?, `itemBox` = ?, `itemManual` = ?, `itemStyle` = ?, `_DELETED` = ?";
+  function editItem ($id, $name, $link, $console, $category, $condition, $box, $manual, $style) {
+    $sql = "INSERT INTO `item` (`itemID`, `itemName`, `itemLink`, `itemConsole`, `itemCat`, `itemCond`, `itemBox`, `itemManual`, `itemStyle`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `itemName` = ?, `itemLink` = ?, `itemConsole` = ?, `itemCat` = ?, `itemCond` = ?, `itemBox` = ?, `itemManual` = ?, `itemStyle` = ?";
     $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('isssssiissssssssiisss', $id, $name, $link, $console, $category, $condition, $box, $manual, $style, $deleted, $name, $link, $console, $category, $condition, $box, $manual, $style, $deleted);
+    $stmt->bind_param('isssssiissssssssiisss', $id, $name, $link, $console, $category, $condition, $box, $manual, $style, $name, $link, $console, $category, $condition, $box, $manual, $style);
     $result = $stmt->execute();
     return $result;
   }
@@ -180,6 +180,13 @@ class Data {
     return $result;
   }
 
+  function deleteItem ($id) {
+    $sql = "UPDATE `item` SET `_DELETED` = CURRENT_TIMESTAMP() WHERE `itemID` = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $result = $stmt->execute();
+    return $result?$result:$this->db->error;
+  }
 }
 
 ?>
