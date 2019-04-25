@@ -7,8 +7,8 @@ class editData extends JSAPI {
   }
 
   function saveItem ($item) {
-    // $this->data->editItem($item['id'], $item['name'], $item['link'], $item['console'], $item['category'], $item['condition'], $item['box'], $item['manual'], $item['style'])
-    return $item;
+    $result = $this->data->editItem($item->id, $item->name, $item->link, $item->console, $item->category, $item->condition, $item->box, $item->manual, $item->style);
+    return $result;
   }
 
   function deleteItem ($id) {

@@ -145,7 +145,7 @@ class Data {
     $stmt = $this->db->prepare($sql);
     $stmt->bind_param('iss', $id, $text, $text);
     $result = $stmt->execute();
-    return $result;
+    return $result?$result:$this->db->error;
   }
 
   function editConsole ($id, $text, $link, $orderBy) {
@@ -153,7 +153,7 @@ class Data {
     $stmt = $this->db->prepare($sql);
     $stmt->bind_param('ississi', $id, $text, $link, $orderBy, $text, $link, $orderBy);
     $result = $stmt->execute();
-    return $result;
+    return $result?$result:$this->db->error;
   }
 
   function editExtras ($id, $itemId, $text) {
@@ -161,15 +161,15 @@ class Data {
     $stmt = $this->db->prepare($sql);
     $stmt->bind_param('iisis', $id, $itemId, $text, $itemId, $text);
     $result = $stmt->execute();
-    return $result;
+    return $result?$result:$this->db->error;
   }
 
   function editItem ($id, $name, $link, $console, $category, $condition, $box, $manual, $style) {
     $sql = "INSERT INTO `item` (`itemID`, `itemName`, `itemLink`, `itemConsole`, `itemCat`, `itemCond`, `itemBox`, `itemManual`, `itemStyle`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `itemName` = ?, `itemLink` = ?, `itemConsole` = ?, `itemCat` = ?, `itemCond` = ?, `itemBox` = ?, `itemManual` = ?, `itemStyle` = ?";
     $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('isssssiissssssssiisss', $id, $name, $link, $console, $category, $condition, $box, $manual, $style, $name, $link, $console, $category, $condition, $box, $manual, $style);
+    $stmt->bind_param('isssssiissssssiis', $id, $name, $link, $console, $category, $condition, $box, $manual, $style, $name, $link, $console, $category, $condition, $box, $manual, $style);
     $result = $stmt->execute();
-    return $result;
+    return $result?$result:$this->db->error;
   }
 
   function editStyle ($id, $name, $text) {
@@ -177,7 +177,7 @@ class Data {
     $stmt = $this->db->prepare($sql);
     $stmt->bind_param('issss', $id, $name, $text, $name, $text);
     $result = $stmt->execute();
-    return $result;
+    return $result?$result:$this->db->error;
   }
 
   function deleteItem ($id) {
