@@ -1,5 +1,4 @@
 <?php
-require_once('init.php');
 
 class priceGuide {
   public  $game,
@@ -12,7 +11,7 @@ class priceGuide {
     $this->condition = $condition;
   }
   
-  function getPrice($format = 'json'){
+  function getPrice(){
     return $this->getAllPrices()[$this->condition];
   }
 
@@ -20,38 +19,17 @@ class priceGuide {
     $url = baseURL.$this->console.'/'.$this->game;
 
     preg_match_all(regex, file_get_contents($url),$m);
-
-    // p($m);
-
     if(count($m['price']) >= 2){
       for($i=0;$i<3;$i++){
         $o[$m['condition'][$i]] = (float)$m['price'][$i];
       }
       return $o;
     }else{
-      echo 'Price error for ',$url,"\n";
+      return false;
     }
 
   }
 }
-
-function getPrice ($itemID) {
-  $db = $GLOBALS['db'];
-  $stmt = $db->prepare("SELECT `itemLink`, `conLink`, `itemCond` FROM item LEFT JOIN `console` ON(`itemCon` = `conText`) WHERE `itemID` = ?");
-  $stmt->bind_param('i', $itemID);
-  $stmt->bind_result($itemLink, $conLink, $itemCond);
-  $stmt->execute();
-
-  $pg = new priceGuide($itemLink, $conLink, $itemCond);
-  $pg->getPrice();
-
-  if ($price) 
-    return $price;
-  else
-    return false;
-}
-
-getPrice(660);
 
 // $gamesInventory = $db->query("SELECT `itemID` FROM `item` WHERE itemLink != '' AND itemDeleted = 0");
 // if($db->error)

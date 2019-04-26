@@ -83,7 +83,8 @@ class Data {
   }
 
   function getValues () {
-    $sql = "SELECT valID,itemID,valAmount,MAX(valLastCheck) as valLastCheck FROM value LEFT JOIN item USING(itemID) WHERE item._DELETED IS NULL GROUP BY itemID";
+    // $sql = "SELECT valID,itemID,valAmount FROM value INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) ON value.itemID = item.itemID AND valLastCheck = lastCheck  AND LEFT JOIN item USING(itemID) WHERE item._DELETED IS NULL GROUP BY itemID";
+    $sql = "SELECT valID,itemID,valAmount FROM value LEFT JOIN item USING(itemID) INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) _last ON value.itemID = item.itemID AND valLastCheck = lastCheck WHERE item._DELETED IS NULL GROUP BY itemID";
     $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){
@@ -184,6 +185,14 @@ class Data {
     $sql = "UPDATE `item` SET `_DELETED` = CURRENT_TIMESTAMP() WHERE `itemID` = ?";
     $stmt = $this->db->prepare($sql);
     $stmt->bind_param('i', $id);
+    $result = $stmt->execute();
+    return $result?$result:$this->db->error;
+  }
+
+  function saveValue ($id, $value) {
+    $sql = "INSERT INTO `value` (`itemID`, `valAmount`, `valLastCheck`) VALUES (?, ?, CURRENT_TIMESTAMP())";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bind_param('id', $id, $value);
     $result = $stmt->execute();
     return $result?$result:$this->db->error;
   }

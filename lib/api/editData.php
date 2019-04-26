@@ -11,6 +11,11 @@ class editData extends JSAPI {
     return $result;
   }
 
+  function saveValue ($itemID, $value) {
+    $result = $this->data->saveValue($itemID, $value);
+    return $result;
+  }
+
   function deleteItem ($id) {
     return $this->data->deleteItem($id);
   }
