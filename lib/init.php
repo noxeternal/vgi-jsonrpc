@@ -40,7 +40,6 @@ function autoloadAddFolder($dir){
   },false,true);
 }
 
-// header("Content-Security-Policy: default-src 'self'; frame-src 'none'; frame-ancestors 'none';");
 define('baseURL', 'https://www.pricecharting.com/game/');
 define('regex', '/.*<td id="(?P<condition>[a-z]+)_price">\s.*>\s*\$*(?P<price>([0-9.]+|N\/A))\s+<\/span>/');
 
