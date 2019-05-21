@@ -84,7 +84,8 @@ class Data {
 
   function getValues () {
     // $sql = "SELECT valID,itemID,valAmount FROM value INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) ON value.itemID = item.itemID AND valLastCheck = lastCheck  AND LEFT JOIN item USING(itemID) WHERE item._DELETED IS NULL GROUP BY itemID";
-    $sql = "SELECT valID,itemID,valAmount,valLastCheck FROM value LEFT JOIN item USING(itemID) INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) _last ON value.itemID = item.itemID AND valLastCheck = lastCheck WHERE item._DELETED IS NULL GROUP BY itemID";
+    // $sql = "SELECT valID,itemID,valAmount,valLastCheck FROM value LEFT JOIN item USING(itemID) INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) lastCheck ON value.itemID = item.itemID AND valLastCheck = lastCheck WHERE item._DELETED IS NULL";
+    $sql = "SELECT valID,itemID,valAmount,valLastCheck FROM value LEFT JOIN item USING(itemID) INNER JOIN (SELECT MAX(valID) AS lastID FROM value GROUP BY itemID) _last ON value.itemID = item.itemID AND valID = lastID WHERE item._DELETED IS NULL GROUP BY itemID ";
     $result = $this->db->query($sql);
     $return = [];
     foreach($result as $row){

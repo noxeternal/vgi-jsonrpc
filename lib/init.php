@@ -1,7 +1,9 @@
 <?php
 
 $db = getenv('DBINFO');
+// var_dump($db); exit;
 $db = json_decode($db);
+// var_dump($db); exit;
 
 $GLOBALS['db'] = new mysqli($db->host, $db->user, $db->pass, $db->name);
 if($db->connect_error)
