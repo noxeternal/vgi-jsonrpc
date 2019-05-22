@@ -49,7 +49,7 @@ class Auth {
   }
 
   function logout () {
-    return;
+    return true;
   }
 
   function getUser ($token) {
