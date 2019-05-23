@@ -1,12 +1,12 @@
 <?php
 
-class getData extends JSAPI {
+class getData extends JSAPI implements iGetData {
   function __construct ($method, $params) {
     $this->noAuth = ['getAll'];
     parent::__construct($method, $params);
   }
 
-  function getAll () {
+  function getAll () :array {
     $data = new Data();
     return [
       'categories'  => $data->getCategories(),
@@ -19,7 +19,7 @@ class getData extends JSAPI {
     ];
   }
 
-  function getDeleted () {
+  function getDeleted () : array {
     $data = new Data();
     return $data->getDeleted();
   }

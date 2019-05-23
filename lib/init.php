@@ -19,12 +19,16 @@ if (!defined('JWT_SECRET')) {
 if(!defined('PHP_API_PATH'))
   define('PHP_API_PATH',__DIR__.'/api/');
 
+if(!defined('PHP_INTERFACE_PATH'))
+  define('PHP_INTERFACE_PATH',__DIR__.'/interfaces/');
+
 set_include_path(get_include_path() . PATH_SEPARATOR . PHP_API_PATH);
 
 if(!isset($skipAutoload))
   autoloadAddFolder(__DIR__.'/');
 
 autoloadAddFolder(PHP_API_PATH);
+autoloadAddFolder(PHP_INTERFACE_PATH);
 
 function autoloadAddFolder($dir){
   spl_autoload_register(function ($class) use ($dir) {

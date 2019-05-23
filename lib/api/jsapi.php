@@ -5,7 +5,7 @@ abstract class JSAPI {
   protected $noAuth = ['methods'];
 
   function __construct($method,$params){
-    $this->token = new stdClass();
+    $this->token = new Token();
 
     if(isset($_ENV['HTTP_AUTHORIZATION'])){
       preg_match('#^Bearer (.+?)$#',$_ENV['HTTP_AUTHORIZATION'],$m);

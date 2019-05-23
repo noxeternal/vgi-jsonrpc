@@ -34,7 +34,7 @@ class Auth {
       $loginUp->execute();
     } 
     if ($valid) {
-      $auth = new stdClass();
+      $auth = new User();
       $auth->valid = $valid;
       $auth->id = $id;
       $auth->user = $username;
@@ -53,7 +53,7 @@ class Auth {
   }
 
   function getUser ($token) {
-    $return = new stdClass();
+    $return = new User();
     $return->valid = true;
     $return->id = $token->id;
     $return->user = $token->user;

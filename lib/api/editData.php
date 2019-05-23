@@ -1,22 +1,22 @@
 <?php
 
-class editData extends JSAPI {
+class editData extends JSAPI implements iEditData {
   function __construct ($method, $params) {
     parent::__construct($method, $params);
     $this->data = new Data();
   }
 
-  function saveItem ($item) {
+  function saveItem ($item) : bool {
     $result = $this->data->editItem($item->id, $item->name, $item->link, $item->console, $item->category, $item->condition, $item->box, $item->manual, $item->style);
     return $result;
   }
 
-  function saveValue ($itemID, $value) {
+  function saveValue ($itemID, $value) : bool {
     $result = $this->data->saveValue($itemID, $value);
     return $result;
   }
 
-  function deleteItem ($id) {
+  function deleteItem ($id) : bool {
     return $this->data->deleteItem($id);
   }
 

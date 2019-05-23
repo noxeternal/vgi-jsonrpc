@@ -1,6 +1,6 @@
 <?php
 
-class apiAuth extends JSAPI {
+class apiAuth extends JSAPI implements iAuth {
   function __construct ($method, $params) {
     $this->noAuth = ['login', 'logout'];
     $this->Auth = new Auth();
@@ -33,12 +33,12 @@ class apiAuth extends JSAPI {
     }
   }
 
-  function login ($username, $password) {
+  function login ($username, $password) : array {
     $auth = $this->Auth->login($username, $password);
 
     if ($auth->valid) {
       if(!isset($this->token))
-        $this->token = new stdClass();
+        $this->token = new Token();
       $this->token = $auth;
       $this->updateToken();
       return [
@@ -52,14 +52,14 @@ class apiAuth extends JSAPI {
     return $auth;
   }
 
-  function logout(){
+  function logout() : bool{
     return $this->Auth->logout();
 
-    $this->token = new stdClass();
+    $this->token = new Token();
     $this->updateToken();
   }
 
-  function getUser () {
+  function getUser () : User {
     return $this->Auth->getUser($this->token);
   }
 }
