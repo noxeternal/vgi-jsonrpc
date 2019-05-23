@@ -1,9 +1,12 @@
 <?php
 
-class apiAuth extends JSAPI implements iAuth {
+namespace api;
+
+class auth extends \JSAPI implements \interfaces\auth {
   function __construct ($method, $params) {
+    // var_dump([$method, $params, $this]); exit;
     $this->noAuth = ['login', 'logout'];
-    $this->Auth = new Auth();
+    $this->Auth = new \Auth();
 
     if (!isset($this->jwt) && isset($_ENV['HTTP_AUTHORIZATION'])){
       preg_match('#^Bearer (.+?)$#',$_ENV['HTTP_AUTHORIZATION'],$m);
@@ -38,28 +41,28 @@ class apiAuth extends JSAPI implements iAuth {
 
     if ($auth->valid) {
       if(!isset($this->token))
-        $this->token = new Token();
+        $this->token = new \Token();
       $this->token = $auth;
       $this->updateToken();
       return [
         "token" => $this->jwt
       ];
     } else {
-      throw new Exception("Invalid username or password (apiAuth) ".var_dump($auth->rehash));
+      throw new \Exception("Invalid username or password (apiAuth) ".var_dump($auth->rehash));
     }
 
-    throw new Exception('BAD_LOGIN',-1);  
+    throw new \Exception('BAD_LOGIN',-1);  
     return $auth;
   }
 
-  function logout() : bool{
+  function logout() : bool {
     return $this->Auth->logout();
 
-    $this->token = new Token();
+    $this->token = new \Token();
     $this->updateToken();
   }
 
-  function getUser () : User {
+  function getUser () : \User {
     return $this->Auth->getUser($this->token);
   }
 }

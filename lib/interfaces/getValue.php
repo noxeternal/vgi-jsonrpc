@@ -1,6 +1,8 @@
 <?php
 
-interface iGetValue {
+namespace interfaces;
+
+interface getValue {
   function getPrice ($itemID) : float;
 }
 

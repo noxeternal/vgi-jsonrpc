@@ -42,7 +42,8 @@ class RPCServer {
     if(substr($method,0,2) == '__') {
       throw new Exception('METHOD_NOT_FOUND',-32601);
     }
-    $this->class = new $c($method,$params);
+    $className = '\\api\\'.$c;
+    $this->class = new $className($method,$params);
     $func = [$this->class,$method];
 
     if(is_callable($func)){

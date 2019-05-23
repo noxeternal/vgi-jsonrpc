@@ -1,6 +1,6 @@
 <?php
 
-class priceGuide {
+class PriceGuide {
   public  $game,
           $console,
           $condition;

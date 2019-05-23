@@ -1,6 +1,8 @@
 <?php
 
-class getValue extends JSAPI implements iGetValue {
+namespace api;
+
+class getValue extends \JSAPI implements \interfaces\getValue {
 
   function __construct ($method, $params) {
     parent::__construct($method, $params);
@@ -14,14 +16,13 @@ class getValue extends JSAPI implements iGetValue {
     $stmt->execute();
     $stmt->fetch();
 
-    $pg = new priceGuide($itemLink, $conLink, $itemCond);
+    $pg = new \PriceGuide($itemLink, $conLink, $itemCond);
     $price = $pg->getPrice();
 
     if ($price) 
       return $price;
     else
       throw new Exception("Price Guide Error for itemID $itemID");
-      
   }
 
 }

@@ -1,9 +1,11 @@
 <?php
 
-class editData extends JSAPI implements iEditData {
+namespace api;
+
+class editData extends \JSAPI implements \interfaces\editData {
   function __construct ($method, $params) {
     parent::__construct($method, $params);
-    $this->data = new Data();
+    $this->data = new \Data();
   }
 
   function saveItem ($item) : bool {

@@ -1,13 +1,15 @@
 <?php
 
-class getData extends JSAPI implements iGetData {
+namespace api;
+
+class getData extends \JSAPI implements \interfaces\getData {
   function __construct ($method, $params) {
     $this->noAuth = ['getAll'];
     parent::__construct($method, $params);
   }
 
   function getAll () :array {
-    $data = new Data();
+    $data = new \Data();
     return [
       'categories'  => $data->getCategories(),
       'consoles'    => $data->getConsoles(),
@@ -20,7 +22,7 @@ class getData extends JSAPI implements iGetData {
   }
 
   function getDeleted () : array {
-    $data = new Data();
+    $data = new \Data();
     return $data->getDeleted();
   }
 
