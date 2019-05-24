@@ -2,7 +2,7 @@
 
 namespace api;
 
-class getData extends \JSAPI implements \interfaces\getData {
+class getData extends JSAPI implements \interfaces\getData {
   function __construct ($method, $params) {
     $this->noAuth = ['getAll'];
     parent::__construct($method, $params);

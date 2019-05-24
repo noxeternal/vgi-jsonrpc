@@ -2,7 +2,7 @@
 
 namespace api;
 
-class getValue extends \JSAPI implements \interfaces\getValue {
+class getValue extends JSAPI implements \interfaces\getValue {
 
   function __construct ($method, $params) {
     parent::__construct($method, $params);

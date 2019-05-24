@@ -1,11 +1,13 @@
 <?php
+
+namespace api;
 define('JWT_DURATION',1 * 25 * 60 * 60); // 1 hour
 
 abstract class JSAPI {
   protected $noAuth = ['methods'];
 
   function __construct($method,$params){
-    $this->token = new Token();
+    $this->token = new \Token();
 
     if(isset($_ENV['HTTP_AUTHORIZATION'])){
       preg_match('#^Bearer (.+?)$#',$_ENV['HTTP_AUTHORIZATION'],$m);
@@ -35,7 +37,7 @@ abstract class JSAPI {
 
   function methods(){
     $ret = [];
-    $class = new ReflectionClass(get_class($this));
+    $class = new \ReflectionClass(get_class($this));
     $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
     foreach($methods as $method) {
       if($method->name == '__construct') continue;
@@ -50,7 +52,7 @@ abstract class JSAPI {
 
   protected function checkToken($jwt){
     try{
-      $token = JWT::decode($jwt,JWT_SECRET,['HS256']);
+      $token = \JWT::decode($jwt,JWT_SECRET,['HS256']);
       $this->token = $token;
       $this->jwt = $jwt;
 
@@ -64,11 +66,11 @@ abstract class JSAPI {
 
   function unauthorized(){
     http_response_code(401);
-    throw new Exception('UNAUTHORIZED',-1);
+    throw new \Exception('UNAUTHORIZED',-1);
   }
 
   function invalidParams(){
-    throw new Exception('Invalid params',-32602);
+    throw new \Exception('Invalid params',-32602);
   }
 
   function __headers(){
@@ -92,7 +94,7 @@ abstract class JSAPI {
     $data->aud = "https://renewyourtag.com";
     $data->iat = time();
     $data->exp = time() + JWT_DURATION;
-    return JWT::encode($data,JWT_SECRET);
+    return \JWT::encode($data,JWT_SECRET);
   }
 }
 ?>

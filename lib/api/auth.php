@@ -2,7 +2,7 @@
 
 namespace api;
 
-class auth extends \JSAPI implements \interfaces\auth {
+class auth extends JSAPI implements \interfaces\auth {
   function __construct ($method, $params) {
     // var_dump([$method, $params, $this]); exit;
     $this->noAuth = ['login', 'logout'];

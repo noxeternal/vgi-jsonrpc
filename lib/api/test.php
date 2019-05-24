@@ -2,7 +2,7 @@
 
 namespace api;
 
-class test extends \JSAPI {
+class test extends JSAPI {
   function __construct ($method, $params) {
     // parent::__construct($method, $params);
   }
