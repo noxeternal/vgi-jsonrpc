@@ -1,11 +1,11 @@
 <?php
 
-$db = getenv('DBINFO');
-// var_dump($db); exit;
-$db = json_decode($db);
-// var_dump($db); exit;
+$dbAccess = getenv('DBINFO');
+// var_dump([$dbAccess, json_decode($dbAccess)]); exit;
+$dbAccess = json_decode($dbAccess);
+// var_dump($dbAccess); exit;
 
-$GLOBALS['db'] = new mysqli($db->host, $db->user, $db->pass, $db->name);
+$GLOBALS['db'] = new mysqli($dbAccess->host, $dbAccess->user, $dbAccess->pass, $dbAccess->name);
 if($db->connect_error)
   die($db->connect_error);
 if($db->error)
