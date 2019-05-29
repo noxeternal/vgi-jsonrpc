@@ -60,7 +60,7 @@ abstract class JSAPI {
         $this->updateToken();
       }
       return true;
-    }catch(Exception $e){}
+    }catch(\Exception $e){}
     return false;
   }
 
