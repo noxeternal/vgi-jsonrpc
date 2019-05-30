@@ -1,26 +1,42 @@
 <?php
 
 class Image {
-  public  $game,
-          $console;
-  private $regex = '/<div class="cover">.*<img src="\/img\/(.*)\?s=[0-9]+/';
 
-  function __construct($game, $console){
-    $this->game = $game;
-    $this->console = $console;
+  function getImage($game, $console){
+    if($console == '' || $game == '')
+      return false;
+    
+    $url = baseURL.'/game/'.$console.'/'.$game;
+    
+    try{
+      $dom = @\DOMDocument::loadHTML(file_get_contents($url));
+      $xpath = new \DOMXPath($dom);
+      $path = "//*[@id='product_details']/*/img";
+      $img = $xpath->query($path)->item(0)->attributes->getNamedItem('src')->value;
+      return explode('?', $img)[0];
+    }catch(\Error $err){
+      return false;
+    }
   }
-  
-  function getImage(){
-    $url = baseURL.$this->console.'/'.$this->game;
-    $pageSource = str_replace("\n", ' ', file_get_contents($url));
 
-    preg_match($this->regex, $pageSource, $m);
-
-    return $m[1]?
-      "https://www.pricecharting.com/img/{$m[1]}":
-      false;
-  }
 }
+
+// CURRENT AS OF 5/30/2019:
+  // $image = new Image();
+  // foreach ($items as $item) {
+  //   // echo $item->getLink(),'/', $item->get_ConsoleLink();
+  //   if ($item->get_ConsoleLink() == '') {
+  //     $img = 'No Console Link';
+  //   } else {
+  //     $img = $image->getImage($item->getLink(), $item->get_ConsoleLink());
+  //     var_dump($img);
+  //     if ($img) {
+  //       $item->setImageUrl(baseURL.$img);
+  //       $item->save();
+  //     }
+  //   }
+  // }
+
 
 // require_once 'init.php';
 // $i = new Image('super-mario-all-stars-and-super-mario-world', 'super-nintendo');
