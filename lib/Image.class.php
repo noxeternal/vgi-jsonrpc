@@ -2,23 +2,41 @@
 
 class Image {
 
-  function getImage($game, $console){
+  function __construct () {}
+
+  function loadImage ($imageUrl) {
+    if ($image = Cache::get('boxart', $imageUrl)) {
+      return $image;
+    }else{
+      $image = $this->getImageData($imageUrl);
+      Cache::set('boxart', $imageUrl, $image);
+      return $image;
+    }
+  }
+
+  function getImageUrl ($game, $console) {
     if($console == '' || $game == '')
-      return false;
+      throw new Exception('No request data sent');
     
     $url = baseURL.'/game/'.$console.'/'.$game;
     
     try{
-      $dom = @\DOMDocument::loadHTML(file_get_contents($url));
-      $xpath = new \DOMXPath($dom);
+      $dom = @DOMDocument::loadHTML(file_get_contents($url));
+      $xpath = new DOMXPath($dom);
       $path = "//*[@id='product_details']/*/img";
       $img = $xpath->query($path)->item(0)->attributes->getNamedItem('src')->value;
-      return explode('?', $img)[0];
-    }catch(\Error $err){
-      return false;
+      $imageUrl = explode('?', $img)[0];
+      $image = $this->getImageData($imageUrl);
+      Cache::set('boxart', $imageUrl, $image);
+      return ;
+    }catch(Error $err){
+      throw new Exception($e->getMessage());
     }
   }
 
+  private function getImageData ($imageUrl) {
+    return base64_encode(file_get_contents($imageUrl));
+  }
 }
 
 // CURRENT AS OF 5/30/2019:
@@ -67,6 +85,3 @@ class Image {
 // }
 
 // echo "\nFin.";
-
-
-?>

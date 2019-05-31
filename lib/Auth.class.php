@@ -2,7 +2,7 @@
 
 class Auth {
 
-  function __construct() {
+  function __construct () {
     $this->db = $GLOBALS['db'];
   }
 
@@ -62,5 +62,3 @@ class Auth {
     return $return;
   }
 }
-
-?>

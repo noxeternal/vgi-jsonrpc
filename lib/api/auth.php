@@ -55,7 +55,7 @@ class auth extends JSAPI implements \interfaces\auth {
     return $auth;
   }
 
-  function logout() : bool {
+  function logout () : bool {
     return $this->Auth->logout();
 
     $this->token = new \Token();
@@ -66,5 +66,3 @@ class auth extends JSAPI implements \interfaces\auth {
     return $this->Auth->getUser($this->token);
   }
 }
-
-?>

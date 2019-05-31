@@ -3,7 +3,5 @@
 namespace interfaces;
 
 interface getImage {
-  public function get($game, $console) : string;
+  public function get ($game, $console) : string;
 }
-
-?>

@@ -5,22 +5,22 @@ class PriceGuide {
           $console,
           $condition;
 
-  function __construct($game, $console, $condition){
+  function __construct ($game, $console, $condition) {
     $this->game = $game;
     $this->console = $console;
     $this->condition = $condition;
   }
   
-  function getPrice(){
+  function getPrice () {
     return $this->getAllPrices()[$this->condition];
   }
 
-  function getAllPrices(){
+  function getAllPrices () {
     $url = baseURL.$this->console.'/'.$this->game;
 
     preg_match_all(regex, file_get_contents($url),$m);
-    if(count($m['price']) >= 2){
-      for($i=0;$i<3;$i++){
+    if(count($m['price']) >= 2) {
+      for($i=0;$i<3;$i++) {
         $o[$m['condition'][$i]] = (float)$m['price'][$i];
       }
       return $o;
@@ -36,12 +36,12 @@ class PriceGuide {
 //   die($db->error);
 
 // $i = 0;
-// foreach($gamesInventory as $row){
+// foreach($gamesInventory as $row) {
 //   echo $i,"\n";
 
 //   $price = getPrice($row['itemID']);
 
-//   if($price){
+//   if($price) {
 //     $stmt - $db->prepare("INSERT INTO value (itemID,valAmount) VALUES (?, ?)");
 //     $stmt->bind_param('id', $row['itemID'], $price);
 //     if($db->error)
@@ -55,6 +55,3 @@ class PriceGuide {
 // }
 
 // echo "\nFin.";
-
-
-?>

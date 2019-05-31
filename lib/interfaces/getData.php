@@ -6,5 +6,3 @@ interface getData {
   public function getAll () : array;
   public function getDeleted () : array;
 }
-
-?>

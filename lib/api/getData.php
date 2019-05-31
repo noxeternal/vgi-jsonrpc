@@ -27,5 +27,3 @@ class getData extends JSAPI implements \interfaces\getData {
   }
 
 }
-
-?>

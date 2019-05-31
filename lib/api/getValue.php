@@ -26,6 +26,3 @@ class getValue extends JSAPI implements \interfaces\getValue {
   }
 
 }
-
-
-?>

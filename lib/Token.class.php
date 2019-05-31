@@ -12,4 +12,3 @@ class Token {
   public $role;
   public $rehash;
 }
-?>

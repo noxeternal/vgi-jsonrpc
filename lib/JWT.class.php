@@ -58,7 +58,7 @@ class JWT
      * @uses jsonDecode
      * @uses urlsafeB64Decode
      */
-    public static function decode($jwt, $key, $allowed_algs = array())
+    public static function decode ($jwt, $key, $allowed_algs = array())
     {
         $timestamp = is_null(static::$timestamp) ? time() : static::$timestamp;
 
@@ -144,7 +144,7 @@ class JWT
      * @uses jsonEncode
      * @uses urlsafeB64Encode
      */
-    public static function encode($payload, $key, $alg = 'HS256', $keyId = null, $head = null)
+    public static function encode ($payload, $key, $alg = 'HS256', $keyId = null, $head = null)
     {
         $header = array('typ' => 'JWT', 'alg' => $alg);
         if ($keyId !== null) {
@@ -176,7 +176,7 @@ class JWT
      *
      * @throws DomainException Unsupported algorithm was specified
      */
-    public static function sign($msg, $key, $alg = 'HS256')
+    public static function sign ($msg, $key, $alg = 'HS256')
     {
         if (empty(static::$supported_algs[$alg])) {
             throw new DomainException('Algorithm not supported');
@@ -209,7 +209,7 @@ class JWT
      *
      * @throws DomainException Invalid Algorithm or OpenSSL failure
      */
-    private static function verify($msg, $signature, $key, $alg)
+    private static function verify ($msg, $signature, $key, $alg)
     {
         if (empty(static::$supported_algs[$alg])) {
             throw new DomainException('Algorithm not supported');
@@ -251,7 +251,7 @@ class JWT
      *
      * @throws DomainException Provided string was invalid JSON
      */
-    public static function jsonDecode($input)
+    public static function jsonDecode ($input)
     {
         if (version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4)) {
             /** In PHP >=5.4.0, json_decode() accepts an options parameter, that allows you
@@ -286,7 +286,7 @@ class JWT
      *
      * @throws DomainException Provided object could not be encoded to valid JSON
      */
-    public static function jsonEncode($input)
+    public static function jsonEncode ($input)
     {
         $json = json_encode($input);
         if (function_exists('json_last_error') && $errno = json_last_error()) {
@@ -304,7 +304,7 @@ class JWT
      *
      * @return string A decoded string
      */
-    public static function urlsafeB64Decode($input)
+    public static function urlsafeB64Decode ($input)
     {
         $remainder = strlen($input) % 4;
         if ($remainder) {
@@ -321,7 +321,7 @@ class JWT
      *
      * @return string The base64 encode of what you passed in
      */
-    public static function urlsafeB64Encode($input)
+    public static function urlsafeB64Encode ($input)
     {
         return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
     }
@@ -333,7 +333,7 @@ class JWT
      *
      * @return void
      */
-    private static function handleJsonError($errno)
+    private static function handleJsonError ($errno)
     {
         $messages = array(
             JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
@@ -354,7 +354,7 @@ class JWT
      *
      * @return int
      */
-    private static function safeStrlen($str)
+    private static function safeStrlen ($str)
     {
         if (function_exists('mb_strlen')) {
             return mb_strlen($str, '8bit');

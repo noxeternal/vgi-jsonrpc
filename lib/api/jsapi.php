@@ -6,22 +6,22 @@ define('JWT_DURATION',1 * 25 * 60 * 60); // 1 hour
 abstract class JSAPI {
   protected $noAuth = ['methods'];
 
-  function __construct($method,$params){
+  function __construct ($method,$params) {
     $this->token = new \Token();
 
-    if(isset($_ENV['HTTP_AUTHORIZATION'])){
+    if(isset($_ENV['HTTP_AUTHORIZATION'])) {
       preg_match('#^Bearer (.+?)$#',$_ENV['HTTP_AUTHORIZATION'],$m);
 
-      if($m){
+      if($m) {
         $jwt = $m[1];
         $this->checkToken($jwt);
       }
     }
     
-    if(isset($_SERVER['HTTP_AUTHORIZATION'])){
+    if(isset($_SERVER['HTTP_AUTHORIZATION'])) {
       preg_match('#^Bearer (.+?)$#',$_SERVER['HTTP_AUTHORIZATION'],$m);
 
-      if($m){
+      if($m) {
         $jwt = $m[1];
         $this->checkToken($jwt);
       }
@@ -30,19 +30,19 @@ abstract class JSAPI {
     if(isset($_COOKIE['token']) && !$jwt)
       $this->checkToken($_COOKIE['token']);
     
-    if(!isset($this->token->id) && !in_array($method, $this->noAuth)){
+    if(!isset($this->token->id) && !in_array($method, $this->noAuth)) {
       return $this->unauthorized();
     }
   }
 
-  function methods(){
+  function methods () {
     $ret = [];
     $class = new \ReflectionClass(get_class($this));
     $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
     foreach($methods as $method) {
       if($method->name == '__construct') continue;
       $name = $method->name;
-      $params = array_map(function($param){
+      $params = array_map(function($param) {
         return $param->name;
       },$method->getParameters());
       $ret[] = $name;
@@ -50,45 +50,45 @@ abstract class JSAPI {
     return $ret;
   }
 
-  protected function checkToken($jwt){
+  protected function checkToken ($jwt) {
     try{
       $token = \JWT::decode($jwt,JWT_SECRET,['HS256']);
       $this->token = $token;
       $this->jwt = $jwt;
 
-      if($token->exp < time() + (1 * 60 * 60)){
+      if($token->exp < time() + (1 * 60 * 60)) {
         $this->updateToken();
       }
       return true;
-    }catch(\Exception $e){}
+    }catch(\Exception $e) {}
     return false;
   }
 
-  function unauthorized(){
+  function unauthorized () {
     http_response_code(401);
     throw new \Exception('UNAUTHORIZED',-1);
   }
 
-  function invalidParams(){
+  function invalidParams () {
     throw new \Exception('Invalid params',-32602);
   }
 
-  function __headers(){
+  function __headers () {
     if(!isset($this->jwt) || empty($this->jwt))
       $this->updateToken();
     $jwt = $this->jwt;
     header("X-Token: {$jwt}");
   }
 
-  function echo($data){
+  function echo ($data) {
     return $data;
   }
 
-  protected function updateToken(){
+  protected function updateToken () {
     $this->jwt = $this->generateToken();
   }
 
-  private function generateToken(){
+  private function generateToken () {
     $data = $this->token;
     $data->iss = "https://renewyourtag.com";
     $data->aud = "https://renewyourtag.com";
@@ -97,4 +97,3 @@ abstract class JSAPI {
     return \JWT::encode($data,JWT_SECRET);
   }
 }
-?>

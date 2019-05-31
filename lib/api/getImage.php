@@ -3,7 +3,7 @@
 namespace api;
 
 class getImage extends JSAPI implements \interfaces\getImage {
-  public function get($game, $console) : string {
+  public function get ($game, $console) : string {
     $i = new \Image($game, $console);
     if ($image = $i->getImage())
       return $image;

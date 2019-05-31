@@ -26,5 +26,3 @@ class editData extends JSAPI implements \interfaces\editData {
     return $this->data->editCategory($id, $text);
   }
 }
-
-?>

@@ -13,5 +13,3 @@ class test extends JSAPI {
 
   
 }
-
-?>

@@ -2,7 +2,7 @@
 
 class Data {
   
-  function __construct() {
+  function __construct () {
     $this->db = $GLOBALS['db'];
   }
 
@@ -198,5 +198,3 @@ class Data {
     return $result?$result:$this->db->error;
   }
 }
-
-?>

@@ -1,8 +1,9 @@
 <?php 
+
 header("Content-type: text/css; charset: UTF-8");
 require_once('../../lib/init.php');
 
-$sql = "SELECT * FROM style";
+$sql = "SELECT * FROM style ORDER BY styleName";
 $result = $db->query($sql);
 
 function formatClassName ($s) {
@@ -19,7 +20,5 @@ function formatStyle ($s) {
   return $style;
 }
 
-foreach($result as $row) {
+foreach($result as $row)
   echo '.',formatClassName($row['styleName'])," {\n",formatStyle($row['styleText']),";\n}\n";
-}
-?>

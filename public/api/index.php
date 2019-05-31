@@ -1,1 +1,4 @@
-<?php require('../../lib/init.php'); RPCServer::handle('JSAPI'); ?>
+<?php 
+
+require('../../lib/init.php'); 
+RPCServer::handle('JSAPI');
