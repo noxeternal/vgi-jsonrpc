@@ -1,200 +1,203 @@
 <?php
 
 class Data {
-  
-  function __construct () {
-    $this->db = $GLOBALS['db'];
+  public function __construct () {
+    // require_once 'init.php';
   }
 
-  function getCategories () {
-    $sql = "SELECT * FROM `category` ORDER BY catText";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'  => floatval($row['catID']),
-        'text'  => $row['catText']
-      ];
+  public function getCategories () {
+    return array_values(vgi\CategoryQuery::create()
+            ->find()
+            ->toArray());
+  }
+
+  public function getStates () {
+    return vgi\StateQuery::create()
+            ->find()
+            ->toArray();
+  }
+
+  public function getConsoles () {
+    return vgi\ConsoleQuery::create()
+            ->leftJoinItem()
+            ->withColumn('count(Item.ItemId)', 'Count')
+            ->groupBy('Console.Text')
+            ->orderByRank()
+            ->find()
+            ->toArray();
+  }
+
+  public function getStyles () {
+    return vgi\StyleQuery::create()
+            ->find()
+            ->toArray();
+  }
+
+  public function getItems () {
+    return  vgi\ItemQuery::create()
+            ->leftJoinWithExtra()
+            ->find()
+            ->toArray();
+  }
+
+  public function getPriceList ($id = false) {
+    $q = new vgi\PriceListQuery();
+    $q->create();
+    if ($id) {
+      $q->findByItemId($id);
     }
-    return $return;
+    return $q
+            ->orderBy('PriceList.ItemId')
+            ->orderBy('PriceList.LastCheck')
+            ->withColumn('UNIX_TIMESTAMP(last_check)', 'UnixTime')
+            ->find()
+            ->toArray();
   }
 
-  function getConditions () {
-    $sql = "SELECT * FROM `condition` ORDER BY condText";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'  => floatval($row['condID']),
-        'text'  => $row['condText']
-      ];
-    }
-    return $return;
+  public function getDeleted () {
+    return vgi\ItemArchiveQuery::create()
+            ->find()
+            ->toArray();
   }
 
-  function getConsoles () {
-    $sql = "SELECT `console`.*,COUNT(`itemID`) AS `conCount` FROM `console` LEFT JOIN `item` ON (`conText` = `itemConsole`) WHERE `item`.`_DELETED` IS NULL GROUP BY `item`.`itemConsole` HAVING conCount > 0 ORDER BY `console`.`conOrderBy`";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'  => floatval($row['conID']),
-        'text'  => $row['conText'], 
-        'link'  => $row['conLink'],
-        'count' => $row['conCount'],
-        'order' => floatval($row['conOrderBy'])
-      ];
-    }
-    return $return;
+  public function editCategory ($id, $text) {
+    vgi\CategoryQuery::create()
+      ->findPk($id)
+      ->setText($text)
+      ->save();
   }
 
-  function getStyles () {
-    $sql = "SELECT * FROM `style` ORDER BY styleName";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'  => floatval($row['styleID']),
-        'name'  => $row['styleName'],
-        'text'  => $row['styleText']
-      ];
-    }
-    return $return;
+  public function editState ($id, $text) {
+    vgi\StateQuery::create()
+      ->findPk($id)
+      ->setText($text)
+      ->save();
   }
 
-  function getItems () {
-    $sql = "SELECT * FROM `item` WHERE `_DELETED` IS NULL ORDER BY `itemName`";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'        => floatval($row['itemID']),
-        'name'      => $row['itemName'],
-        'link'      => $row['itemLink'],
-        'console'   => ($row['itemConsole']),
-        'category'  => ($row['itemCat']),
-        'condition' => ($row['itemCond']),
-        'box'       => floatval($row['itemBox']),
-        'manual'    => floatval($row['itemManual']),
-        'style'     => ($row['itemStyle'])
-      ];
-    }
-    return $return;
+  public function editConsole ($id, $text, $link, $orderBy) {
+    vgi\ConsoleQuery::create()
+      ->findPk($id)
+      ->setText($text)
+      ->setLink($link)
+      ->moveToRank($orderBy)
+      ->save();
   }
 
-  function getValues () {
-    // $sql = "SELECT valID,itemID,valAmount FROM value INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) ON value.itemID = item.itemID AND valLastCheck = lastCheck  AND LEFT JOIN item USING(itemID) WHERE item._DELETED IS NULL GROUP BY itemID";
-    // $sql = "SELECT valID,itemID,valAmount,valLastCheck FROM value LEFT JOIN item USING(itemID) INNER JOIN (SELECT MAX(valLastCheck) AS lastCheck FROM value GROUP BY itemID) lastCheck ON value.itemID = item.itemID AND valLastCheck = lastCheck WHERE item._DELETED IS NULL";
-    $sql = "SELECT valID,itemID,valAmount,valLastCheck FROM value LEFT JOIN item USING(itemID) INNER JOIN (SELECT MAX(valID) AS lastID FROM value GROUP BY itemID) _last ON value.itemID = item.itemID AND valID = lastID WHERE item._DELETED IS NULL GROUP BY itemID ";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'        => floatval($row['valID']),
-        'item'      => floatval($row['itemID']),
-        'value'     => floatval($row['valAmount']),
-        'lastCheck' => $row['valLastCheck']
-      ];
-    }
-    return $return;
+  public function editExtra ($id, $text) {
+    vgi\ExtraQuery::create()
+      ->findPk($id)
+      ->setText($text)
+      ->save();
   }
 
-  function getExtras () {
-    $sql = "SELECT * FROM extra";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'   => floatval($row['extraID']),
-        'item' => floatval($row['itemID']),
-        'text' => $row['extraText']
-      ];
-    }
-    return $return;
+  public function editItem ($id, $name, $link, $console, $category, $state, $box, $manual, $style) {
+    vgi\ItemQuery::create()
+      ->findPk($id)
+      ->setName($name)
+      ->setLink($link)
+      ->setConsole($console)
+      ->setState($state)
+      ->setCategory($category)
+      ->setBox($box)
+      ->setManual($manual)
+      ->setStyle($style)
+      ->save();
   }
 
-  function getDeleted () {
-    $sql = "SELECT * FROM `item` WHERE `_DELETED` IS NOT NULL";
-    $result = $this->db->query($sql);
-    $return = [];
-    foreach($result as $row){
-      $return[] = [
-        'id'        => floatval($row['itemID']),
-        'name'      => $row['itemName'],
-        'link'      => $row['itemLink'],
-        'console'   => ($row['itemConsole']),
-        'category'  => ($row['itemCat']),
-        'condition' => ($row['itemCond']),
-        'box'       => floatval($row['itemBox']),
-        'manual'    => floatval($row['itemManual']),
-        'deleted'     => ($row['_DELETED'])
-      ];
-    }
-    return $return;
+  public function editStyle ($id, $name, $text) {
+    vgi\StyleQuery::create()
+      ->findPk($id)
+      ->setName($name)
+      ->setText($text)
+      ->save();
   }
 
-  function editCategory ($id, $text) {
-    $sql = "INSERT INTO `category` (`catID`, `catText`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `catText` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('iss', $id, $text, $text);
-    $result = $stmt->execute();
-    return $result?$result:$stmt->error;
-
+  public function newCategory ($text) {
+    $Category = new vgi\Category();
+    $Category->setText($text);
+    $Category->save();
+    return $Category->getId();
   }
 
-  function editCondition ($id, $text) {
-    $sql = "INSERT INTO `condition` (`condID`, `condText`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `condText` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('iss', $id, $text, $text);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function newState ($text) {
+    $State = new vgi\State();
+    $State->setText($text);
+    $State->save();
+    return $State->getId();
   }
 
-  function editConsole ($id, $text, $link, $orderBy) {
-    $sql = "INSERT INTO `console` (`catID`, `catText`, `conLink`, `conOrderBy`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `conText` = ?, `conLink` = ?, `conOrderBy` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('ississi', $id, $text, $link, $orderBy, $text, $link, $orderBy);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function newConsole ($text, $link, $orderBy) {
+    $Console = new vgi\Console();
+    $Console->setText($text);
+    $Console->setLink($link);
+    $Console->setRank($orderBy);
+    $Console->save();
+    return $Console->getId();
   }
 
-  function editExtras ($id, $itemId, $text) {
-    $sql = "INSERT INTO `extra` (`extraID`, `itemID`, `extraText`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `itemID` = ?, `extraText` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('iisis', $id, $itemId, $text, $itemId, $text);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function newExtra ($text) {
+    $Extra = new vgi\Extra();
+    $Extra->setText($text);
+    $Extra->save();
+    return $Extra->getId();
   }
 
-  function editItem ($id, $name, $link, $console, $category, $condition, $box, $manual, $style) {
-    $sql = "INSERT INTO `item` (`itemID`, `itemName`, `itemLink`, `itemConsole`, `itemCat`, `itemCond`, `itemBox`, `itemManual`, `itemStyle`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `itemName` = ?, `itemLink` = ?, `itemConsole` = ?, `itemCat` = ?, `itemCond` = ?, `itemBox` = ?, `itemManual` = ?, `itemStyle` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('isssssiissssssiis', $id, $name, $link, $console, $category, $condition, $box, $manual, $style, $name, $link, $console, $category, $condition, $box, $manual, $style);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function newItem ($name, $link, $imageUrl, $console, $category, $state, $box, $manual, $style) {
+    $Item = new vgi\Item();
+    $Item->setName($name);
+    $Item->setLink($link);
+    $Item->setImageUrl($imageUrl);
+    $Item->setConsole($console);
+    $Item->setCategory($category);
+    $Item->setState($state);
+    $Item->setBox($box);
+    $Item->setManual($manual);
+    $Item->setStyle($style);
+    $Item->save();
+    return $Item->getId();
   }
 
-  function editStyle ($id, $name, $text) {
-    $sql = "INSERT INTO `style` (`styleID`, `styleName`, `styleText`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `styleName` = ?, `styleText` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('issss', $id, $name, $text, $name, $text);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function newStyle ($name, $text) {
+    $Style = new vgi\Style();
+    $Style->setName($name);
+    $Style->setText($text);
+    $Style->save();
+    return $Style->getId();
   }
 
-  function deleteItem ($id) {
-    $sql = "UPDATE `item` SET `_DELETED` = CURRENT_TIMESTAMP() WHERE `itemID` = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('i', $id);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function newValue ($id, $value) {
+    $value = new vgi\PriceList();
+    $value->setId($id);
+    $value->setAmount($value);
+    $value->save();
   }
 
-  function saveValue ($id, $value) {
-    $sql = "INSERT INTO `value` (`itemID`, `valAmount`, `valLastCheck`) VALUES (?, ?, CURRENT_TIMESTAMP())";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bind_param('id', $id, $value);
-    $result = $stmt->execute();
-    return $result?$result:$this->db->error;
+  public function deleteCategory ($id) {
+    $this->delete('Category', $id);
+  }
+
+  public function deleteState ($id) {
+    $this->delete('State', $id);
+  }
+
+  public function deleteConsole ($id) {
+    $this->delete('Console', $id);
+  }
+
+  public function deleteExtra ($id) {
+    $this->delete('Extra', $id);
+  }
+
+  public function deleteItem ($id) {
+    $this->delete('Item', $id);
+  }
+
+  public function deleteStyle ($id) {
+    $this->delete('Style', $id);
+  }
+
+  private function delete($table, $id){
+    $tq = 'vgi\\'.$table.'Query';
+    $tq::create()->findPk($id)->delete();
   }
 }

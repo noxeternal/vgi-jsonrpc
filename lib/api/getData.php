@@ -13,17 +13,20 @@ class getData extends JSAPI implements \interfaces\getData {
     return [
       'categories'  => $data->getCategories(),
       'consoles'    => $data->getConsoles(),
-      'conditions'  => $data->getConditions(),
+      'conditions'  => $data->getStates(),
       'styles'      => $data->getStyles(),
       'games'       => $data->getItems(),
-      'values'      => $data->getValues(),
-      'extras'      => $data->getExtras()
+      'values'      => $data->getPriceList()
     ];
   }
 
   function getDeleted () : array {
     $data = new \Data();
     return $data->getDeleted();
+  }
+
+  function getOne ($id) {
+    return $data->getPriceList($id);
   }
 
 }

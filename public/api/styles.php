@@ -1,10 +1,10 @@
-<?php 
-
+<?php
+namespace vgi;
 header("Content-type: text/css; charset: UTF-8");
-require_once('../../lib/init.php');
+// header("Content-type: application/json");
+require '../../lib/init.php';
 
-$sql = "SELECT * FROM style ORDER BY styleName";
-$result = $db->query($sql);
+$styles = StyleQuery::create()->find();
 
 function formatClassName ($s) {
   return str_replace(' ', '_', $s);
@@ -20,5 +20,7 @@ function formatStyle ($s) {
   return $style;
 }
 
-foreach($result as $row)
-  echo '.',formatClassName($row['styleName'])," {\n",formatStyle($row['styleText']),";\n}\n";
+foreach($styles as $style)
+  echo '.',formatClassName($style->getName())," {\n",
+    formatStyle($style->getText()),";\n",
+  "}\n";

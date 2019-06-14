@@ -1,24 +1,10 @@
 <?php
 
+if(!defined('DEBUG'))
+  define('DEBUG', true);
+
 $dbAccess = getenv('DBINFO');
 $dbAccess = json_decode($dbAccess);
-$GLOBALS['db'] = new mysqli($dbAccess->host, $dbAccess->user, $dbAccess->pass, $dbAccess->name);
-if($db->connect_error)
-  die($db->connect_error);
-if($db->error)
-  die($db->error);
-
-if (!defined('REDIS_HOST')) {
-  define('REDIS_HOST', getenv('REDIS_HOST'));
-}
-
-if (!defined('REDIS_PORT')) {
-  define('REDIS_PORT', getenv('REDIS_PORT'));
-}
-
-if (!defined('JWT_SECRET')) {
-  define('JWT_SECRET','f9e8519d5ba2b2ba5e4b778e283c5ec72fe70384e4e23a52a250d00015ea0406'); // Random SHA256
-}
 
 if(!defined('PHP_API_PATH'))
   define('PHP_API_PATH',__DIR__.'/api/');
@@ -49,6 +35,34 @@ function autoloadAddFolder ($dir) {
     if (file_exists(strtolower($file))) { require_once strtolower($file);   return; }
   },false,true);
 }
+
+require_once 'vendor/autoload.php';
+require_once 'propelConfig.php';
+
+// if(DEBUG == true){
+  $dataSource = \Propel\Runtime\Propel::getDefaultDatasource();
+  $con = \Propel\Runtime\Propel::getWriteConnection($dataSource);
+  $con->useDebug(true);
+// }
+
+// $GLOBALS['db'] = new mysqli($dbAccess->host, $dbAccess->user, $dbAccess->pass, $dbAccess->name);
+// if($db->connect_error)
+//   die($db->connect_error);
+// if($db->error)
+//   die($db->error);
+
+if (!defined('REDIS_HOST')) {
+  define('REDIS_HOST', getenv('REDIS_HOST'));
+}
+
+if (!defined('REDIS_PORT')) {
+  define('REDIS_PORT', getenv('REDIS_PORT'));
+}
+
+if (!defined('JWT_SECRET')) {
+  define('JWT_SECRET','f9e8519d5ba2b2ba5e4b778e283c5ec72fe70384e4e23a52a250d00015ea0406'); // Random SHA256
+}
+
 
 define('baseURL', 'https://www.pricecharting.com/game/');
 define('regex', '/.*<td id="(?P<condition>[a-z]+)_price">\s.*>\s*\$*(?P<price>([0-9.]+|N\/A))\s+<\/span>/');
