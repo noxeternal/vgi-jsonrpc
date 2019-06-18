@@ -30,6 +30,8 @@ abstract class JSAPI {
     if(isset($_COOKIE['token']) && !$jwt)
       $this->checkToken($_COOKIE['token']);
     
+    // var_dump($this->token); exit;
+
     if(!isset($this->token->id) && !in_array($method, $this->noAuth)) {
       return $this->unauthorized();
     }

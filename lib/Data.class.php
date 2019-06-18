@@ -91,8 +91,13 @@ class Data {
   }
 
   public function editItem ($id, $name, $link, $console, $category, $state, $box, $manual, $style) {
-    vgi\ItemQuery::create()
-      ->findPk($id)
+    $item = vgi\ItemQuery::create()->findPk($id);
+
+    if($item === NULL) {
+      $item = new vgi\Item();
+    }
+
+    $item
       ->setName($name)
       ->setLink($link)
       ->setConsole($console)

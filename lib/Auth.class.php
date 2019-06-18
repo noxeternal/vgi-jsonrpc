@@ -12,7 +12,8 @@ class Auth {
       $login = vgi\LoginQuery::create()
                 ->filterByName($username)
                 ->find();
-      $hash = $login[0]->getPasswd();
+      $login = $login[0];
+      $hash = $login->getPasswd();
     }catch(Exception $e){
       throw new Exception('Invalid username or password. '.$e->getMessage());
     }
@@ -35,11 +36,11 @@ class Auth {
     } 
 
     if ($valid) {
-      $auth = new \User();
+      $auth = new User();
       $auth->valid = $valid;
-      $auth->id = $id;
-      $auth->user = $username;
-      $auth->role = $role;
+      $auth->id = $login->getLoginId();
+      $auth->user = $login->getName();
+      $auth->role = $login->getRole();
       $auth->rehash = $rehash;
       return $auth;
     } else {

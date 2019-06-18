@@ -9,7 +9,7 @@ class editData extends JSAPI implements \interfaces\editData {
   }
 
   function saveItem ($item) : bool {
-    $result = $this->data->editItem($item->id, $item->name, $item->link, $item->console, $item->category, $item->condition, $item->box, $item->manual, $item->style);
+    $result = $this->data->editItem($item->ItemId, $item->Name, $item->Link, $item->Console, $item->Category, $item->State, $item->Box, $item->Manual, $item->Style);
     return $result;
   }
 
