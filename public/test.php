@@ -1,7 +1,7 @@
 <?php
 
 header('content-type:text/plain');
-require '../lib/init.php';
+require '../inc/init.php';
 
 echo 'host: ',REDIS_HOST,' port: ',REDIS_PORT,"\n";
 

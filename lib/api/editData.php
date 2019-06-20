@@ -8,21 +8,21 @@ class editData extends JSAPI implements \interfaces\editData {
     $this->data = new \Data();
   }
 
-  function saveItem ($item) : bool {
+  function saveItem ($item) : void {
     $result = $this->data->editItem($item->ItemId, $item->Name, $item->Link, $item->Console, $item->Category, $item->State, $item->Box, $item->Manual, $item->Style);
-    return $result;
+    return;
   }
 
-  function saveValue ($itemID, $value) : bool {
-    $result = $this->data->saveValue($itemID, $value);
-    return $result;
+  function saveValue ($itemID, $value) : void {
+    $result = $this->data->newValue($itemID, $value);
+    return;
   }
 
-  function deleteItem ($id) : bool {
-    return $this->data->deleteItem($id);
+  function deleteItem ($id) : void {
+    return;
   }
 
-  function editCategory ($id, $text) {
-    return $this->data->editCategory($id, $text);
+  function editCategory ($id, $text) : void{
+    return;
   }
 }

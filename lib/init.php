@@ -1,5 +1,6 @@
 <?php
 
+// define('DEBUG', false);
 if(!defined('DEBUG'))
   define('DEBUG', true);
 
@@ -13,6 +14,11 @@ if(!defined('PHP_INTERFACE_PATH'))
   define('PHP_INTERFACE_PATH',__DIR__.'/interfaces/');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . PHP_API_PATH);
+
+require_once 'vendor/autoload.php';
+require_once 'propelConfig.php';
+require_once __DIR__.'/../inc/colorStreamHandler.php';
+require_once __DIR__.'/../inc/colors.php';
 
 if(!isset($skipAutoload))
   autoloadAddFolder(__DIR__.'/');
@@ -36,20 +42,15 @@ function autoloadAddFolder ($dir) {
   },false,true);
 }
 
-require_once 'vendor/autoload.php';
-require_once 'propelConfig.php';
-
-// if(DEBUG == true){
+if(DEBUG == true){
+  $logger = new \Monolog\Logger('defaultLogger');
+  $logger->pushHandler(new \Monolog\Handler\colorStreamHandler('php://stderr'));
+  \Propel\Runtime\Propel::getServiceContainer()->setLogger('defaultLogger', $logger);
+  
   $dataSource = \Propel\Runtime\Propel::getDefaultDatasource();
-  $con = \Propel\Runtime\Propel::getWriteConnection($dataSource);
+  $con = Propel\Runtime\Propel::getWriteConnection($dataSource);
   $con->useDebug(true);
-// }
-
-// $GLOBALS['db'] = new mysqli($dbAccess->host, $dbAccess->user, $dbAccess->pass, $dbAccess->name);
-// if($db->connect_error)
-//   die($db->connect_error);
-// if($db->error)
-//   die($db->error);
+}
 
 if (!defined('REDIS_HOST')) {
   define('REDIS_HOST', getenv('REDIS_HOST'));

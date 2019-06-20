@@ -3,7 +3,7 @@
 namespace interfaces;
 
 interface editData {
-  public function saveItem ($item) : bool;
-  public function saveValue ($itemID, $value) : bool;
-  public function deleteItem ($id) : bool;
+  public function saveItem ($item) : void;
+  public function saveValue ($itemID, $value) : void;
+  public function deleteItem ($id) : void;
 }

@@ -170,10 +170,11 @@ class Data {
     return $Style->getId();
   }
 
-  public function newValue ($id, $value) {
+  public function newValue ($id, $newValue) {
+    // var_dump();exit;
     $value = new vgi\PriceList();
-    $value->setId($id);
-    $value->setAmount($value);
+    $value->setItemId($id);
+    $value->setAmount($newValue);
     $value->save();
   }
 
