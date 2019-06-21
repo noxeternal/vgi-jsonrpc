@@ -8,9 +8,9 @@ class editData extends JSAPI implements \interfaces\editData {
     $this->data = new \Data();
   }
 
-  function saveItem ($item) : void {
+  function saveItem ($item) : int {
     $result = $this->data->editItem($item->ItemId, $item->Name, $item->Link, $item->Console, $item->Category, $item->State, $item->Box, $item->Manual, $item->Style);
-    return;
+    return $result;
   }
 
   function saveValue ($itemID, $value) : void {
@@ -19,6 +19,7 @@ class editData extends JSAPI implements \interfaces\editData {
   }
 
   function deleteItem ($id) : void {
+    $result = $this->data->deleteItem($id);
     return;
   }
 

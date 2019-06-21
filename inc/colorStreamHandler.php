@@ -39,7 +39,7 @@ class colorStreamHandler extends StreamHandler {
 
     $color = false;
     if(strpos($record['formatted'], 'INSERT') > 0)
-      $color = 'green';
+      $color = 'cyan';
     if(!$color && strpos($record['formatted'], 'INFO') > 0)
       $color = 'blue';
     $color = $color?$color:'red';

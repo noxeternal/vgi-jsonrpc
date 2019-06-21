@@ -107,6 +107,8 @@ class Data {
       ->setManual($manual)
       ->setStyle($style)
       ->save();
+
+    return $item->getItemId();
   }
 
   public function editStyle ($id, $name, $text) {

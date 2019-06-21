@@ -26,7 +26,7 @@ class getValue extends JSAPI implements \interfaces\getValue {
     if ($price) 
       return $price;
     else
-      throw new Exception("Price Guide Error for itemID $itemID");
+      throw new \Exception("Price Guide Error for itemID $itemID");
   }
 
 }
