@@ -42,13 +42,14 @@ function autoloadAddFolder ($dir) {
   },false,true);
 }
 
+$dataSource = \Propel\Runtime\Propel::getDefaultDatasource();
+$con = Propel\Runtime\Propel::getWriteConnection($dataSource);
+
 if(DEBUG == true){
   $logger = new \Monolog\Logger('defaultLogger');
   $logger->pushHandler(new \Monolog\Handler\colorStreamHandler('php://stderr'));
   \Propel\Runtime\Propel::getServiceContainer()->setLogger('defaultLogger', $logger);
   
-  $dataSource = \Propel\Runtime\Propel::getDefaultDatasource();
-  $con = Propel\Runtime\Propel::getWriteConnection($dataSource);
   $con->useDebug(true);
 }
 

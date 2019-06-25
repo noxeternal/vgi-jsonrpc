@@ -48,7 +48,7 @@ class Data {
     }
     return $q
             ->orderBy('PriceList.ItemId')
-            ->orderBy('PriceList.LastCheck')
+            ->orderBy('PriceList.LastCheck', 'desc')
             ->withColumn('UNIX_TIMESTAMP(last_check)', 'UnixTime')
             ->find()
             ->toArray();
