@@ -111,6 +111,11 @@ class Data {
     return $item->getItemId();
   }
 
+  public function editImageUrl ($id, $imageUrl) {
+    $item = vgi\ItemQuery::create()->findPk($id);
+    $item->setImageUrl($imageUrl)->save();
+  }
+
   public function editStyle ($id, $name, $text) {
     vgi\StyleQuery::create()
       ->findPk($id)

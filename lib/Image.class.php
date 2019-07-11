@@ -2,41 +2,56 @@
 
 class Image {
 
-  function __construct () {}
+  private $game,
+          $console;
 
-  function loadImage ($imageUrl) {
-    if ($image = Cache::get('boxart', $imageUrl)) {
-      return $image;
-    }else{
-      $image = $this->getImageData($imageUrl);
-      Cache::set('boxart', $imageUrl, $image);
-      return $image;
-    }
+  function __construct ($item, $console) {
+    if (empty($item) || empty($console))
+      throw new Exception('No request data sent: '.$item.' :: '.$console);
+
+    $itemRec = vgi\ItemQuery::create()
+                  ->filterByName($item)
+                  ->filterByConsole($console)
+                  ->findOne();
+
+    $consoleRec = vgi\ConsoleQuery::create()
+                    ->filterByText($console)
+                    ->findOne();
+
+    $this->itemLink = $itemRec->getLink();
+    $this->consoleLink = $consoleRec->getLink();
   }
 
-  function getImageUrl ($game, $console) {
-    if($console == '' || $game == '')
-      throw new Exception('No request data sent');
-    
-    $url = baseURL.'/game/'.$console.'/'.$game;
-    
+  // function loadImage () {
+  //   $imageUrl = $this->getImageUrl();
+  //   // if ($image = Cache::get('boxart', $imageUrl)) {
+  //   //   return $image;
+  //   // }else{
+  //     $image = 'data:image/png;base64,'.$this->getImageData($imageUrl);
+  //     Cache::set('boxart', $imageUrl, $image);
+  //     return $image;
+  //   // }
+  // }
+
+  function getImageUrl () {
+
+    $url = baseURL.'game/'.$this->consoleLink.'/'.$this->itemLink;
+
     try{
       $dom = @DOMDocument::loadHTML(file_get_contents($url));
       $xpath = new DOMXPath($dom);
       $path = "//*[@id='product_details']/*/img";
       $img = $xpath->query($path)->item(0)->attributes->getNamedItem('src')->value;
       $imageUrl = explode('?', $img)[0];
-      $image = $this->getImageData($imageUrl);
-      Cache::set('boxart', $imageUrl, $image);
-      return ;
-    }catch(Error $err){
-      throw new Exception($e->getMessage());
+      return baseURL.$imageUrl;
+    }catch(Error $e){
+      throw new Exception('GetImageUrl '.$e->getMessage());
     }
   }
 
-  private function getImageData ($imageUrl) {
-    return base64_encode(file_get_contents($imageUrl));
-  }
+  // private function getImageData ($imageUrl) {
+  //   return base64_encode(file_get_contents($imageUrl));
+  // }
 }
 
 // CURRENT AS OF 5/30/2019:

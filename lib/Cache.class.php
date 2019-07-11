@@ -4,7 +4,7 @@ class Cache {
   static $client;
 
   static function init () {
-    self::$client = new Redis();
+    self::$client = new \Redis();
     self::$client->pconnect(REDIS_HOST, REDIS_PORT);
   }
   static function get ($table,$key) {

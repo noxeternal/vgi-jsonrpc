@@ -10,13 +10,13 @@ class PriceGuide {
     $this->console = $console;
     $this->condition = $condition;
   }
-  
+
   function getPrice () {
     return $this->getAllPrices()[$this->condition];
   }
 
   function getAllPrices () {
-    $url = baseURL.$this->console.'/'.$this->game;
+    $url = baseURL.'game/'.$this->console.'/'.$this->game;
 
     preg_match_all(regex, file_get_contents($url),$m);
     if(count($m['price']) >= 2) {

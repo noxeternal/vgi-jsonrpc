@@ -49,7 +49,7 @@ if(DEBUG == true){
   $logger = new \Monolog\Logger('defaultLogger');
   $logger->pushHandler(new \Monolog\Handler\colorStreamHandler('php://stderr'));
   \Propel\Runtime\Propel::getServiceContainer()->setLogger('defaultLogger', $logger);
-  
+
   $con->useDebug(true);
 }
 
@@ -66,5 +66,5 @@ if (!defined('JWT_SECRET')) {
 }
 
 
-define('baseURL', 'https://www.pricecharting.com/game/');
+define('baseURL', 'https://www.pricecharting.com/');
 define('regex', '/.*<td id="(?P<condition>[a-z]+)_price">\s.*>\s*\$*(?P<price>([0-9.]+|N\/A))\s+<\/span>/');
