@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "php -S 0.0.0.0:3001 -t public",
-    "_dev": "source .env && php -S 0.0.0.0:3001 -t public"
+    "_dev": "php -S 0.0.0.0:3001 -t public",
+    "dev": "source ./.env && php -S 0.0.0.0:3001 -t public"
   },
   "repository": "git@github.com:noxeternal/vgi-jsonrpc.git",
   "author": "Michael Rice <rice.michaelt@gmail.com>",
