@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="category" idMethod="native" phpName="Category" namespace="vgi">
+    <column name="text" phpName="Text" type="VARCHAR" primaryKey="true" size="50" required="true" />
+    <behavior name="archivable" />
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="state" idMethod="native" phpName="State" namespace="vgi">
+    <column name="text" phpName="Text" type="VARCHAR" primaryKey="true" size="50" required="true" />
+    <behavior name="archivable" />
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="console" idMethod="native" phpName="Console" namespace="vgi">
+    <column name="text" phpName="Text" type="VARCHAR" primaryKey="true" size="75" required="true" />
+    <column name="link" phpName="Link" type="VARCHAR" size="25" required="true" />
+    <column name="order_by" phpName="OrderBy" type="INTEGER" required="true" />
+    <behavior name="archivable" />
+    <behavior name="sortable">
+      <parameter name="rank_column" value="order_by" />
+    </behavior>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="extra" idMethod="native" phpName="Extra" namespace="vgi">
+    <column name="extra_id" phpName="ExtraId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="item_id" phpName="ItemId" type="BIGINT" required="true" />
+    <column name="text" phpName="Text" type="VARCHAR" size="100" required="true" />
+    <foreign-key foreignTable="item" name="_item_id_extra" phpName="ItemIdExtra" onDelete="cascade">
+      <reference local="item_id" foreign="item_id" />
+    </foreign-key>
+    <behavior name="archivable" />
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="login" idMethod="native" phpName="Login" namespace="vgi">
+    <column name="login_id" phpName="LoginId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" phpName="Name" type="VARCHAR" size="50" required="true" />
+    <column name="role" phpName="Role" type="VARCHAR" size="10" required="true" />
+    <column name="passwd" phpName="Passwd" type="VARCHAR" size="255" required="true" />
+    <column name="updated" phpName="Updated" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP" />
+    <unique name="name">
+      <unique-column name="name" />
+    </unique>
+    <behavior name="archivable" />
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="style" idMethod="native" phpName="Style" namespace="vgi">
+    <column name="name" phpName="Name" type="VARCHAR" primaryKey="true" size="50" required="true" defaultValue="" />
+    <column name="text" phpName="Text" type="VARCHAR" size="255" required="true" />
+    <behavior name="archivable" />
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="item" idMethod="native" phpName="Item" namespace="vgi">
+    <column name="item_id" phpName="ItemId" type="BIGINT" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true" />
+    <column name="link" phpName="Link" type="VARCHAR" size="75" />
+    <column name="image_url" phpName="ImageUrl" type="VARCHAR" size="255" />
+    <column name="console" phpName="Console" type="VARCHAR" size="75" required="true" />
+    <column name="category" phpName="Category" type="VARCHAR" size="50" required="true" />
+    <column name="state" phpName="State" type="VARCHAR" size="50" required="true" />
+    <column name="box" phpName="Box" type="BOOLEAN" size="1" required="true" defaultValue="false" />
+    <column name="manual" phpName="Manual" type="BOOLEAN" size="1" required="true" defaultValue="false" />
+    <column name="style" phpName="Style" type="VARCHAR" size="50" required="true" defaultValue="_" />
+    <foreign-key foreignTable="console" name="_console" phpName="_Console">
+      <reference local="console" foreign="text" />
+    </foreign-key>
+    <foreign-key foreignTable="category" name="_category" phpName="_Category">
+      <reference local="category" foreign="text" />
+    </foreign-key>
+    <foreign-key foreignTable="state" name="_state" phpName="_State">
+      <reference local="state" foreign="text" />
+    </foreign-key>
+    <foreign-key foreignTable="style" name="_style" phpName="_Style">
+      <reference local="style" foreign="name" />
+    </foreign-key>
+    <behavior name="archivable" />
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="price_list" idMethod="native" phpName="PriceList" namespace="vgi">
+    <column name="price_id" phpName="PriceId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="item_id" phpName="ItemId" type="BIGINT" required="true" />
+    <column name="amount" phpName="Amount" type="FLOAT" required="true" />
+    <column name="last_check" phpName="LastCheck" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP" />
+    <foreign-key foreignTable="item" name="_item_id_price_list" phpName="ItemIdPriceList" onDelete="cascade">
+      <reference local="item_id" foreign="item_id" />
+    </foreign-key>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>
+  <table name="image_data" idMethod="native" phpName="ImageData" namespace="vgi">
+    <column name="image_url" phpName="ImageUrl" type="VARCHAR" size="255" />
+    <column name="image_data" phpName="Image" type="VARBINARY" required="true" />
+    <index name="iImage">
+      <index-column name="image_url" />
+    </index>
+    <foreign-key foreignTable="item" name="_image_url" phpName="_ImageUrl" onDelete="cascade">
+      <reference local="image_url" foreign="image_url" />
+    </foreign-key>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB" />
+      <parameter name="Charset" value="utf8" />
+    </vendor>
+  </table>    
+</database>

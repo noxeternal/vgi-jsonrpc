@@ -1,0 +1,10 @@
+propel:
+    database:
+        connections:
+            default:
+                adapter: mysql
+                dsn: mysql:host=192.99.199.82;port=3306;dbname=propelvgi
+                user: collector
+                password: 3TUdtpK4ScTz88Qb
+                settings:
+                    charset: utf8

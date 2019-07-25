@@ -3,28 +3,32 @@
 // define('DEBUG', false);
 if(!defined('DEBUG'))
   define('DEBUG', true);
-
-$dbAccess = getenv('DBINFO');
-$dbAccess = json_decode($dbAccess);
-
+  
 if(!defined('PHP_API_PATH'))
   define('PHP_API_PATH',__DIR__.'/api/');
 
 if(!defined('PHP_INTERFACE_PATH'))
   define('PHP_INTERFACE_PATH',__DIR__.'/interfaces/');
 
+if(!defined('ORM_PATH'))
+  define('ORM_PATH', __DIR__.'/../orm/');
+
 set_include_path(get_include_path() . PATH_SEPARATOR . PHP_API_PATH);
 
-require_once 'vendor/autoload.php';
+$dbAccess = getenv('DBINFO');  
+$dbAccess = json_decode($dbAccess);
+
+require_once __DIR__.'/../inc/colors.php';
+require_once __DIR__.'/../vendor/autoload.php';
 require_once 'propelConfig.php';
 require_once __DIR__.'/../inc/colorStreamHandler.php';
-require_once __DIR__.'/../inc/colors.php';
 
 if(!isset($skipAutoload))
   autoloadAddFolder(__DIR__.'/');
 
 autoloadAddFolder(PHP_API_PATH);
 autoloadAddFolder(PHP_INTERFACE_PATH);
+autoloadAddFolder(ORM_PATH);
 
 function autoloadAddFolder ($dir) {
   spl_autoload_register(function ($class) use ($dir) {
