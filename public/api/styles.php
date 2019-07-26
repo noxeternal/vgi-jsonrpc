@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors',1);
 namespace vgi;
 header("Content-type: text/css; charset: UTF-8");
 // header("Content-type: application/json");
