@@ -20,15 +20,16 @@ $dbAccess = json_decode($dbAccess);
 
 require_once __DIR__.'/../inc/colors.php';
 require_once __DIR__.'/../vendor/autoload.php';
-require_once 'propelConfig.php';
 require_once __DIR__.'/../inc/colorStreamHandler.php';
 
 if(!isset($skipAutoload))
-  autoloadAddFolder(__DIR__.'/');
+autoloadAddFolder(__DIR__.'/');
 
 autoloadAddFolder(PHP_API_PATH);
 autoloadAddFolder(PHP_INTERFACE_PATH);
 autoloadAddFolder(ORM_PATH);
+
+require_once 'propelConfig.php';
 
 function autoloadAddFolder ($dir) {
   spl_autoload_register(function ($class) use ($dir) {
