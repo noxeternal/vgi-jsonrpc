@@ -1,0 +1,25 @@
+0.0.0.0:80
+log stdout
+errors stderr
+
+header / -Server
+
+root {$WEB_ROOT}
+
+rewrite {
+  to {path} {path}/ / 
+}
+
+git {
+  repo {$REPO}
+  path {$REPO_PATH}
+  branch {$BRANCH}
+  interval 3600
+  key {$KEY}
+  hook {$WEBHOOK_URL} {$WEBHOOK_SECRET}
+  then composer install
+  args --recursive
+}
+
+fastcgi / 127.0.0.1:9000 php
+on startup php-fpm7
