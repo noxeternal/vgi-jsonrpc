@@ -29,4 +29,12 @@ class getValue extends JSAPI implements \interfaces\getValue {
       throw new \Exception("Price Guide Error for itemID $itemID");
   }
 
+  public static function getPrice($itemId) {
+    try {
+      $this->getPrice($itemId);
+    }catch(\Exception $e){
+      return false;
+    }
+  }
+
 }

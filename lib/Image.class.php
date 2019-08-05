@@ -12,6 +12,7 @@ class Image {
     $itemRec = vgi\ItemQuery::create()
                   ->filterByName($item)
                   ->filterByConsole($console)
+                  ->filterByState(['new','complete','used'])
                   ->findOne();
 
     $consoleRec = vgi\ConsoleQuery::create()
@@ -43,9 +44,9 @@ class Image {
       $path = "//*[@id='product_details']/*/img";
       $img = $xpath->query($path)->item(0)->attributes->getNamedItem('src')->value;
       $imageUrl = explode('?', $img)[0];
-      return baseURL.$imageUrl;
+      return baseURL.substr($imageUrl, 1);
     }catch(Error $e){
-      throw new Exception('GetImageUrl '.$e->getMessage());
+      throw new Exception('GetImageUrl '.$e->getMessage()."\nURL: ".$url);
     }
   }
 

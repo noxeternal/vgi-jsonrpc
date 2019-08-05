@@ -11,7 +11,7 @@ class getImage extends JSAPI implements \interfaces\getImage {
   //     throw new \Exception('Unable to find cover art');
   // }
 
-  public function getUrl ($game, $console) : string {
+  public static function getUrl ($game, $console) : string {
     $i = new \Image($game, $console);
     if ($imageUrl = $i->getImageUrl())
       return $imageUrl;

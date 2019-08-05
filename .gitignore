@@ -1,4 +1,6 @@
 .env
 _*.php
 vendor
-generated_*
+generated*
+cli/pricelist.csv
+cli/salelist.csv
