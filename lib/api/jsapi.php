@@ -90,8 +90,8 @@ abstract class JSAPI {
 
   private function generateToken () {
     $data = $this->token;
-    $data->iss = "https://renewyourtag.com";
-    $data->aud = "https://renewyourtag.com";
+    $data->iss = "https://noxeternal.net";
+    $data->aud = "https://noxeternal.net";
     $data->iat = time();
     $data->exp = time() + JWT_DURATION;
     return \JWT::encode($data,JWT_SECRET);
